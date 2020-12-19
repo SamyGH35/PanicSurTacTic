@@ -8,7 +8,6 @@ public class Contagion : MonoBehaviour
     //      0 -> non contaminé
     //      1 -> porteur sans symptôme
     //      2 -> éternuement à intervalle régulier
-    //      3 -> enlève les masques des autres + fuit devant le joueur
     public int stade = 0;
 
     // Taille de la zone de contamination en sphere autour du tactic
@@ -18,6 +17,7 @@ public class Contagion : MonoBehaviour
     public int minTimeBetweenCough = 5;
     public int maxTimeBetweenCough = 20;
 
+    public ParticleSystem feedBack;
     private ParticleSystem coughParticles;
 
     private bool cough;
@@ -30,9 +30,39 @@ public class Contagion : MonoBehaviour
     public Material blueMasked;
     public Material blueColor;
 
-    public int time2live = 5;
+    public int time2live = 30;
 
+    private int maskCount = 0;
     private bool masked = false;
+    private bool wearingMask = false;
+
+    private bool hit = false;
+
+    public bool IsMasked()
+    {
+        return wearingMask;
+    }
+
+    public void HitByGrenade()
+    {
+        if (!wearingMask)
+        {
+            transform.Find("Capsule").GetComponent<MeshRenderer>().material = blue;
+        }
+        else
+        {
+            transform.Find("Capsule").GetComponent<MeshRenderer>().material = blueMasked;
+        }
+        transform.Find("Capsule").transform.Find("Bras gauche").GetComponent<MeshRenderer>().material = blueColor;
+        transform.Find("Capsule").transform.Find("Bras droit").GetComponent<MeshRenderer>().material = blueColor;
+        hit = true;
+        stade = 0;
+    }
+
+    public bool GrenadeHit()
+    {
+        return hit;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -53,20 +83,29 @@ public class Contagion : MonoBehaviour
         {
             if (!cough)
             {
+                cough = true;
                 StartCoroutine(WaitBeforeCought());
             }
         }
         if (masked)
         {
+            masked = false;
             StartCoroutine(UnMask());
         }
     }
 
+    public int getStade()
+    {
+        return this.stade;
+    }
+
     IEnumerator WaitBeforeCought()
     {
-        cough = true;
         yield return new WaitForSeconds(Random.Range(minTimeBetweenCough, maxTimeBetweenCough));
-        Cough();
+        if (stade > 1)
+        {
+            Cough();
+        }
     }
 
     void Cough()
@@ -88,15 +127,22 @@ public class Contagion : MonoBehaviour
 
     void GetInfected()
     {
-        if (stade > 1)
-        {
-            transform.Find("Capsule").GetComponent<MeshRenderer>().material = green;
-            transform.Find("Capsule").transform.Find("Bras gauche").GetComponent<MeshRenderer>().material = greenColor;
-            transform.Find("Capsule").transform.Find("Bras droit").GetComponent<MeshRenderer>().material = greenColor;
-        }
-        if (stade < 3)
+        if (stade < 2)
         {
             stade++;
+        }
+        if (stade > 0)
+        {
+            if (!wearingMask)
+            {
+                transform.Find("Capsule").GetComponent<MeshRenderer>().material = green;
+            }
+            else
+            {
+                transform.Find("Capsule").GetComponent<MeshRenderer>().material = greenMasked;
+            }
+            transform.Find("Capsule").transform.Find("Bras gauche").GetComponent<MeshRenderer>().material = greenColor;
+            transform.Find("Capsule").transform.Find("Bras droit").GetComponent<MeshRenderer>().material = greenColor;
         }
     }
 
@@ -104,30 +150,41 @@ public class Contagion : MonoBehaviour
     {
         if (other.name == "Mask(Clone)")
         {
-            if (transform.Find("Capsule").GetComponent<MeshRenderer>().material.name == "Blue Material (Instance)")
+            if (stade<1)
             {
                 transform.Find("Capsule").GetComponent<MeshRenderer>().material = blueMasked;
-                masked = true;
             }
-            if (transform.Find("Capsule").GetComponent<MeshRenderer>().material.name == "Green Material (Instance)")
+            else
             {
                 transform.Find("Capsule").GetComponent<MeshRenderer>().material = greenMasked;
-                masked = true;
+            }
+            masked = true;
+            wearingMask = true;
+            maskCount++;
+            if (feedBack && masked)
+            {
+                ParticleSystem ps = Instantiate(feedBack);
+                ps.transform.position = transform.position;
+                ps.transform.parent = transform;
             }
         }
     }
 
     IEnumerator UnMask()
     {
-        masked = false;
         yield return new WaitForSeconds(time2live);
-        if (transform.Find("Capsule").GetComponent<MeshRenderer>().material.name == "Blue masked Material (Instance)")
+        if (maskCount<=1)
         {
-            transform.Find("Capsule").GetComponent<MeshRenderer>().material = blue;
+            wearingMask = false;
+            if (stade < 1)
+            {
+                transform.Find("Capsule").GetComponent<MeshRenderer>().material = blue;
+            }
+            else
+            {
+                transform.Find("Capsule").GetComponent<MeshRenderer>().material = green;
+            }
         }
-        if (transform.Find("Capsule").GetComponent<MeshRenderer>().material.name == "Green masked Material (Instance)")
-        {
-            transform.Find("Capsule").GetComponent<MeshRenderer>().material = green;
-        }
+        maskCount--;
     }
 }

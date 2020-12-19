@@ -3,7 +3,10 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: [noeud_routage, PNJ, Character]
+  tags:
+  - noeud_routage
+  - PNJ
+  - Character
   layers:
   - Default
   - TransparentFX
@@ -14,8 +17,8 @@ TagManager:
   - 
   - 
   - Character
-  - 
-  - 
+  - Stock
+  - Mur
   - 
   - 
   - 

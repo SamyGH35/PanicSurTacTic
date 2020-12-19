@@ -93,12 +93,13 @@ GameObject:
   m_Component:
   - component: {fileID: 3454083958846402722}
   - component: {fileID: 7609323074927924511}
-  - component: {fileID: 6832140344764957784}
+  - component: {fileID: 2040056666904380097}
   - component: {fileID: 1659748203671040901}
   - component: {fileID: 8836103650958714140}
   - component: {fileID: 1734104963474334395}
   - component: {fileID: 2075689456537397940}
-  - component: {fileID: 3047343659842541281}
+  - component: {fileID: 6558500917602310459}
+  - component: {fileID: 872015136302645461}
   m_Layer: 8
   m_Name: PNJ Vert
   m_TagString: Character
@@ -134,27 +135,19 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 2, z: 1}
   m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &6832140344764957784
-MonoBehaviour:
+--- !u!65 &2040056666904380097
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3454083958846402721}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc936c4ce46aa4e4ea8e7663b1ed2dda, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  green: {fileID: 2100000, guid: 80f6565bbdefdad4086b2dbf6437aebb, type: 2}
-  greenMasked: {fileID: 2100000, guid: b2987429f7768a84a8d46bb2fd7592e9, type: 2}
-  greenColor: {fileID: 2100000, guid: a1f2b14c29751a249b5b7da70b72e7f5, type: 2}
-  blue: {fileID: 2100000, guid: 0678a9c0a1e3e0449b48efcd7e901b20, type: 2}
-  blueMasked: {fileID: 2100000, guid: e50ca889abec2354e8db9b0d20c335ba, type: 2}
-  blueColor: {fileID: 2100000, guid: 5471975a9badab04fb2a8454b9144012, type: 2}
-  feedBack: {fileID: 2745002516068058691, guid: 4500a7da25287084b96e9a504127ae20,
-    type: 3}
-  time2live: 5
+  serializedVersion: 2
+  m_Size: {x: 1.5, y: 2.5, z: 1.5}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!114 &1659748203671040901
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -190,13 +183,15 @@ MonoBehaviour:
   radiusArea: 5
   minTimeBetweenCough: 5
   maxTimeBetweenCough: 20
+  feedBack: {fileID: 2745002516068058691, guid: 4500a7da25287084b96e9a504127ae20,
+    type: 3}
   green: {fileID: 2100000, guid: 80f6565bbdefdad4086b2dbf6437aebb, type: 2}
   greenMasked: {fileID: 2100000, guid: b2987429f7768a84a8d46bb2fd7592e9, type: 2}
   greenColor: {fileID: 2100000, guid: a1f2b14c29751a249b5b7da70b72e7f5, type: 2}
   blue: {fileID: 2100000, guid: 0678a9c0a1e3e0449b48efcd7e901b20, type: 2}
   blueMasked: {fileID: 2100000, guid: e50ca889abec2354e8db9b0d20c335ba, type: 2}
   blueColor: {fileID: 2100000, guid: 5471975a9badab04fb2a8454b9144012, type: 2}
-  time2live: 5
+  time2live: 30
 --- !u!199 &1734104963474334395
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -217,7 +212,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 15a7f66d7cfc9de40a1cc29172cfa688, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -241,7 +236,7 @@ ParticleSystemRenderer:
   m_RenderMode: 0
   m_SortMode: 0
   m_MinParticleSize: 0
-  m_MaxParticleSize: 0.5
+  m_MaxParticleSize: 0.25
   m_CameraVelocityScale: 0
   m_VelocityScale: 0
   m_LengthScale: 2
@@ -453,7 +448,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 0, g: 0.5, b: 0.08619106, a: 1}
+      maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -5035,7 +5030,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
---- !u!54 &3047343659842541281
+--- !u!54 &6558500917602310459
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5047,10 +5042,22 @@ Rigidbody:
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 3
+  m_Constraints: 94
+  m_CollisionDetection: 0
+--- !u!114 &872015136302645461
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3454083958846402721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebaf0b5e32731234f90c2f34eb42062f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6832140345141698581
 GameObject:
   m_ObjectHideFlags: 0

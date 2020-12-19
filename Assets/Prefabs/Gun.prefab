@@ -143,14 +143,11 @@ MonoBehaviour:
   maskPrefab: {fileID: 6031152615089747281, guid: 9e8082f3c0ad38e4aa5cf19821971cda,
     type: 3}
   maskSpawn: {fileID: 5485766053751297322}
-  maskSpeed: 5
+  maskSpeed: 50
   lifeTime: 3
   timeBetweenFire: 0.5
-  maxLoad: 10
-  load: 10
-  reloadTime: 2
   shotSound: {fileID: 8300000, guid: b4480a4ec21515641971816cbc30c10a, type: 3}
-  reloadSound: {fileID: 8300000, guid: ae5f82d069d918e4ea16bcdc4a6d1cb9, type: 3}
+  source: {fileID: 0}
 --- !u!82 &4204889697095765243
 AudioSource:
   m_ObjectHideFlags: 0

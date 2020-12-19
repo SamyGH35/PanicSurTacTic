@@ -5,54 +5,45 @@ using UnityEngine;
 public class Grenade : MonoBehaviour
 {
     public float delay = 3f;
-    float countdown;
-    bool hasExploded = false;
     public GameObject explosionEffect;
-    public float radius=5f;
-    public float force= 700f;
+    public float radius = 5f;
+    public float force = 700f;
+
+    public AudioClip shotSound;
+    public AudioSource source;
+
     // Start is called before the first frame update
     void Start()
     {
-        countdown = delay;
-        
+        StartCoroutine(ExplodeAfter(delay));
     }
 
-    // Update is called once per frame
-    void Update()
+    IEnumerator ExplodeAfter(float delay)
     {
-        countdown -= Time.deltaTime;
-        if(countdown <= 0f  && !hasExploded){
-            Explode();
-            hasExploded=true;
+        yield return new WaitForSeconds(delay);
+        while (transform.position.y > 1)
+        {
+            yield return new WaitForSeconds(0.1f);
         }
+        Explode();
     }
-    void Explode(){
 
+    void Explode() //changer num de contamination
+    {
+        source.volume = (float)PlayerPrefs.GetInt("VolumeSons") / 100;
+        source.PlayOneShot(shotSound);
         Instantiate(explosionEffect, transform.position, transform.rotation);
-        Collider[] colliders=Physics.OverlapSphere(transform.position, radius);
-        foreach (Collider nearbyObject in colliders){
-            if (nearbyObject.name.Contains("PNJ")){
-                GameObject capsule = nearbyObject.transform.GetChild(0).gameObject;
-                GameObject brasdroit = capsule.transform.GetChild(0).gameObject;
-                GameObject brasgauche = capsule.transform.GetChild(1).gameObject;
-                List<GameObject> gameObjects = new List<GameObject>{capsule, brasdroit, brasgauche};
-                
-                foreach (GameObject item in gameObjects)
+        Collider[] colliders = Physics.OverlapSphere(transform.position, radius);
+        foreach (Collider nearbyObject in colliders)
+        {
+            if (nearbyObject.name.Contains("PNJ"))
+            {
+                if (nearbyObject.GetComponent<Contagion>())
                 {
-                    Renderer rend = item.GetComponent<Renderer>();
-                    rend.material.SetColor("_Color",Color.red);
+                    nearbyObject.GetComponent<Contagion>().HitByGrenade();
                 }
-             
-            }
-            Rigidbody rb = nearbyObject.GetComponent<Rigidbody>();
-            if (rb != null){
-                rb.AddExplosionForce(force, transform.position, radius);
             }
         }
-
-        Destroy(gameObject);        
-
-       
-
+        Destroy(gameObject);
     }
 }

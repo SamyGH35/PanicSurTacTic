@@ -23,7 +23,7 @@ public class Pause : MonoBehaviour
     {
         if (!positionnement.activeInHierarchy)
         {
-            if (Input.GetKeyDown("escape") && !pause.activeInHierarchy)
+            if (Input.GetKeyDown("escape") && !pause.activeInHierarchy && Time.timeScale != 0)
             {
                 source.volume = (float)PlayerPrefs.GetInt("VolumeSons") / 100;
                 source.PlayOneShot(loadPauseSound);

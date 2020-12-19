@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour
 {
     public float movementSpeed = 0.25f;
-    public float jumpHeight = 50000;
+    public float jumpHeight = 5000;
     private Rigidbody rb;
     private float movementX;
     private float movementY;
@@ -21,20 +21,27 @@ public class PlayerController : MonoBehaviour
     public GameObject positionnement;
     public GameObject stock;
 
+    public GameObject plafond;
+
     public AudioClip restock;
     public AudioSource sourceSons;
     public AudioSource sourceMusiques;
 
     private bool stockPositionnement = true;
 
+    public float jumpTime = 0.25f;
+    private float jumpTimeCounter;
+    private bool isJumping = false;
+
     void Start()
     {
         sourceMusiques.volume = (float)PlayerPrefs.GetInt("VolumeMusiques") / 400;
         rb = GetComponent<Rigidbody>();
         Time.timeScale = 0;
-        PlayerPrefs.SetInt("MunGun", 0);
-        PlayerPrefs.SetInt("MunGrenade", 0);
-        PlayerPrefs.SetInt("MunTourelle", 0);
+        PlayerPrefs.SetInt("MunGun", 100);
+        PlayerPrefs.SetInt("MunGrenade", 25);
+        PlayerPrefs.SetInt("MunTourelle", 5);
+        plafond.SetActive(false);
     }
 
     void OnMove(InputValue movementValue)
@@ -68,9 +75,27 @@ public class PlayerController : MonoBehaviour
         */
         transform.Rotate(new Vector3(PlayerPrefs.GetInt("Inversion", -1) * Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0) * PlayerPrefs.GetInt("Sensibilite", 10) * Time.timeScale, Space.Self);
 
-        if ((Input.GetKeyDown("right shift") || Input.GetKeyDown("left shift") || Input.GetKeyDown("space")) && transform.position.y < 0.5f)
+        if ((Input.GetKeyDown("right shift") || Input.GetKeyDown("left shift") || Input.GetKeyDown("space")) && transform.position.y < 0.25f)
         {
             rb.AddForce(Vector3.up * jumpHeight * Time.timeScale);
+            isJumping = true;
+            jumpTimeCounter = jumpTime;
+        }
+        if ((Input.GetKey("right shift") || Input.GetKey("left shift") || Input.GetKey("space")) && isJumping)
+        {
+            if (jumpTimeCounter > 0)
+            {
+                rb.AddForce(Vector3.up * jumpHeight * Time.timeScale);
+                jumpTimeCounter -= Time.deltaTime;
+            }
+            else
+            {
+                isJumping = false;
+            }
+        }
+        if ((Input.GetKeyUp("right shift") || Input.GetKeyUp("left shift") || Input.GetKeyUp("space")))
+        {
+            isJumping = false;
         }
     }
 
@@ -79,18 +104,30 @@ public class PlayerController : MonoBehaviour
         if (Input.GetMouseButtonDown(0) && stockPositionnement)
         {
             Ray ray = cityCamera.ScreenPointToRay(Input.mousePosition);
+            ray.origin -= new Vector3(5, 0, 5);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
             {
-                Instantiate(stock, hit.point, Quaternion.identity);
+                //Debug.Log(hit.collider.gameObject.name + " at " + hit.point);
+                if (hit.point.y < 0.5f && hit.point.x > -192 && hit.point.x < 187 && hit.point.z > -275 && hit.point.z < 257)
+                {
+                    if (hit.collider.gameObject.name.Length >= 4 && (hit.collider.gameObject.name.Substring(0, 4) == "Road" || hit.collider.gameObject.name.Substring(0, 4) == "Terr" || hit.collider.gameObject.name.Substring(0, 4) == "Gras"))
+                    {
+                        Instantiate(stock, new Vector3(hit.point.x, hit.point.y, hit.point.z), Quaternion.identity);
+                        Cursor.visible = false;
+                        positionnement.SetActive(false);
+                        plafond.SetActive(true);
+                    }
+                }
             }
+        }
+        if (Input.GetMouseButtonUp(0) && stockPositionnement)
+        {
             stockPositionnement = false;
-            Cursor.visible = false;
-            positionnement.SetActive(false);
             Time.timeScale = 1;
         }
 
-        mapCamera.transform.position = new Vector3(transform.position.x, 10, transform.position.z);
+            mapCamera.transform.position = new Vector3(transform.position.x, 10, transform.position.z);
         minimapCamera.transform.position = new Vector3(transform.position.x, 10, transform.position.z);
         Quaternion rotation = Quaternion.identity;
         rotation.eulerAngles = new Vector3(90, transform.rotation.eulerAngles.y, 0);
