@@ -1,9 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Contagion : MonoBehaviour
 {
+    private static int nbInstance = 0;
+    public static int contamination = 0;
+    public Slider sliderContamination;
+
     // Stade de la maladie :
     //      0 -> non contaminé
     //      1 -> porteur sans symptôme
@@ -12,6 +17,11 @@ public class Contagion : MonoBehaviour
 
     // Taille de la zone de contamination en sphere autour du tactic
     public float radiusArea = 5.0f;
+
+    // 1 chance sur 10
+    public int chanceToBeInfectedMasked = 10;
+    // 1 chance sur 3
+    public int chanceToInfect = 3;
 
     // Temps entre 2 éternuements
     public int minTimeBetweenCough = 5;
@@ -67,6 +77,7 @@ public class Contagion : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        nbInstance += 1;
         coughParticles = GetComponent<ParticleSystem>();
 
         var shape = coughParticles.shape;
@@ -74,6 +85,8 @@ public class Contagion : MonoBehaviour
         var emission = coughParticles.emission;
         emission.enabled = true;
         emission.SetBurst(0, new ParticleSystem.Burst(0.0f, radiusArea * 10));
+
+        sliderContamination = GameObject.Find("/Canvas/Contamination/Slider").GetComponent<Slider>();
     }
 
     // Update is called once per frame
@@ -119,7 +132,9 @@ public class Contagion : MonoBehaviour
             Contagion script = col.transform.gameObject.GetComponent<Contagion>();
             if (script && script != this)
             {
-                script.GetInfected();
+                // On n'infecte que 1 fois sur 3 en moyenne
+                if (Random.Range(0, chanceToInfect) == 0)
+                    script.GetInfected();
             }
         }
         cough = false;
@@ -127,22 +142,40 @@ public class Contagion : MonoBehaviour
 
     void GetInfected()
     {
-        if (stade < 2)
+        int random = 0;
+        if (masked)
+            random = Random.Range(0, chanceToBeInfectedMasked); // Si masqué, 1 chance sur 10 d'être infecté
+
+        if (random == 0)
         {
-            stade++;
+            if (stade < 2)
+            {
+                stade++;
+                PlusContamination();
+            }
+            if (stade > 0)
+            {
+                if (!wearingMask)
+                {
+                    transform.Find("Capsule").GetComponent<MeshRenderer>().material = green;
+                }
+                else
+                {
+                    transform.Find("Capsule").GetComponent<MeshRenderer>().material = greenMasked;
+                }
+                transform.Find("Capsule").transform.Find("Bras gauche").GetComponent<MeshRenderer>().material = greenColor;
+                transform.Find("Capsule").transform.Find("Bras droit").GetComponent<MeshRenderer>().material = greenColor;
+            }
         }
-        if (stade > 0)
+    }
+
+    private void PlusContamination()
+    {
+        contamination += 1;
+
+        if (sliderContamination)
         {
-            if (!wearingMask)
-            {
-                transform.Find("Capsule").GetComponent<MeshRenderer>().material = green;
-            }
-            else
-            {
-                transform.Find("Capsule").GetComponent<MeshRenderer>().material = greenMasked;
-            }
-            transform.Find("Capsule").transform.Find("Bras gauche").GetComponent<MeshRenderer>().material = greenColor;
-            transform.Find("Capsule").transform.Find("Bras droit").GetComponent<MeshRenderer>().material = greenColor;
+            sliderContamination.value = contamination * 100 / (nbInstance * 2);
         }
     }
 

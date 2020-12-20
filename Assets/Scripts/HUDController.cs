@@ -50,6 +50,7 @@ public class HUDController : MonoBehaviour
 
     void Start()
     {
+        taux.text = contamination.value.ToString() + "%";
         PlayerPrefs.SetInt("Masques tirés", 0);
         PlayerPrefs.SetInt("Grenades lancées", 0);
         PlayerPrefs.SetInt("Tourelles déployées", 0);
