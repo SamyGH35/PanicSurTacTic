@@ -27,6 +27,7 @@ public class HUDController : MonoBehaviour
     public AudioSource source;
 
     public Slider contamination;
+    public Slider contaminationMaxValue;
     public Text taux;
 
     public int secondsToWin = 60;
@@ -50,6 +51,7 @@ public class HUDController : MonoBehaviour
 
     void Start()
     {
+        contaminationMaxValue.value = maxContamination;
         PlayerPrefs.SetInt("Masques tirés", 0);
         PlayerPrefs.SetInt("Grenades lancées", 0);
         PlayerPrefs.SetInt("Tourelles déployées", 0);

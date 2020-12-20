@@ -659,8 +659,8 @@ public class Tutoriel : MonoBehaviour
         if (other.name == "Stock(Clone)" && (Input.GetKeyDown("r") || Input.GetMouseButtonDown(1)))
         {
             PlayerPrefs.SetInt("MunGun", 100);
-            PlayerPrefs.SetInt("MunGrenade", 25);
-            PlayerPrefs.SetInt("MunTourelle", 5);
+            PlayerPrefs.SetInt("MunGrenade", 5);
+            PlayerPrefs.SetInt("MunTourelle", 3);
             sourceSons.volume = (float)PlayerPrefs.GetInt("VolumeSons") / 100;
             sourceSons.PlayOneShot(restock);
         }

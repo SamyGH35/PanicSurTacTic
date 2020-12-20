@@ -39,8 +39,8 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         Time.timeScale = 0;
         PlayerPrefs.SetInt("MunGun", 100);
-        PlayerPrefs.SetInt("MunGrenade", 25);
-        PlayerPrefs.SetInt("MunTourelle", 5);
+        PlayerPrefs.SetInt("MunGrenade", 5);
+        PlayerPrefs.SetInt("MunTourelle", 3);
         plafond.SetActive(false);
     }
 
@@ -67,7 +67,6 @@ public class PlayerController : MonoBehaviour
         {
             rb.MovePosition(targetPosition);
         }
-
         /*
         Quaternion rotation = Quaternion.Euler(new Vector3(PlayerPrefs.GetInt("Inversion", -1) * Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0.0f) * PlayerPrefs.GetInt("Sensibilite", 10) * Time.timeScale);
         rotation *= rb.rotation;
@@ -165,8 +164,8 @@ public class PlayerController : MonoBehaviour
         if (other.name == "Stock(Clone)" && (Input.GetKeyDown("r") || Input.GetMouseButtonDown(1)))
         {
             PlayerPrefs.SetInt("MunGun", 100);
-            PlayerPrefs.SetInt("MunGrenade", 25);
-            PlayerPrefs.SetInt("MunTourelle", 5);
+            PlayerPrefs.SetInt("MunGrenade", 5);
+            PlayerPrefs.SetInt("MunTourelle", 3);
             sourceSons.volume = (float)PlayerPrefs.GetInt("VolumeSons") / 100;
             sourceSons.PlayOneShot(restock);
         }
