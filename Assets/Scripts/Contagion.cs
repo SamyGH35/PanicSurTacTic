@@ -68,7 +68,12 @@ public class Contagion : MonoBehaviour
         transform.Find("Capsule").transform.Find("Bras gauche").GetComponent<MeshRenderer>().material = blueColor;
         transform.Find("Capsule").transform.Find("Bras droit").GetComponent<MeshRenderer>().material = blueColor;
         hit = true;
-        stade = 0;
+
+        while (stade > 0)
+        {
+            MinusContamination();
+            stade--;
+        }
     }
 
     public bool GrenadeHit()
@@ -89,6 +94,9 @@ public class Contagion : MonoBehaviour
         emission.SetBurst(0, new ParticleSystem.Burst(0.0f, radiusArea * 10));
 
         sliderContamination = GameObject.Find("/Canvas/Contamination/Slider").GetComponent<Slider>();
+
+        for (int i = 0; i < stade; ++i)
+            PlusContamination();
     }
 
     // Update is called once per frame
@@ -176,6 +184,16 @@ public class Contagion : MonoBehaviour
     private void PlusContamination()
     {
         contamination += 1;
+
+        if (sliderContamination)
+        {
+            sliderContamination.value = contamination * 100 / (nbInstance * 2);
+        }
+    }
+
+    private void MinusContamination()
+    {
+        contamination -= 1;
 
         if (sliderContamination)
         {
