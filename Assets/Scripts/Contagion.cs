@@ -20,6 +20,8 @@ public class Contagion : MonoBehaviour
 
     // 1 chance sur 10
     public int chanceToBeInfectedMasked = 10;
+    // 1 chance sur 2
+    public int chanceToBeInfected = 2;
     // 1 chance sur 3
     public int chanceToInfect = 3;
 
@@ -145,6 +147,8 @@ public class Contagion : MonoBehaviour
         int random = 0;
         if (masked)
             random = Random.Range(0, chanceToBeInfectedMasked); // Si masqué, 1 chance sur 10 d'être infecté
+        else
+            random = Random.Range(0, chanceToBeInfected); // Sinon, 1 chance sur 2
 
         if (random == 0)
         {
