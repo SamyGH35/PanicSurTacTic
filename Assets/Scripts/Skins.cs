@@ -58,6 +58,7 @@ public class Skins : MonoBehaviour
 
     void Start()
     {
+        PlayerPrefs.SetInt("Skin1", 1);
         sourceMusiques.volume = (float)PlayerPrefs.GetInt("VolumeMusiques") / 100;
         sourceSons.volume = (float)PlayerPrefs.GetInt("VolumeSons") / 100;
         fragVirus.text = PlayerPrefs.GetInt("FragVirus", 0).ToString();

@@ -249,7 +249,6 @@ public class HUDController : MonoBehaviour
                 this.statGagné.text = "Masques tirés : " + PlayerPrefs.GetInt("Masques tirés", 0) + System.Environment.NewLine +
                 "Grenades lancées : " + PlayerPrefs.GetInt("Grenades lancées", 0) + System.Environment.NewLine +
                 "Tourelles déployées : " + PlayerPrefs.GetInt("Tourelles déployées", 0) + System.Environment.NewLine +
-                "Villes protégées : 1" + System.Environment.NewLine +
                 "Durée de la partie : " + s + System.Environment.NewLine +
                 "Fragments de virus récoltés : " + PlayerPrefs.GetInt("Fragments de virus récoltés", 0);
                 PlayerPrefs.SetInt("FragVirus", PlayerPrefs.GetInt("FragVirus", 0) + PlayerPrefs.GetInt("Fragments de virus récoltés", 0));
@@ -261,7 +260,6 @@ public class HUDController : MonoBehaviour
                 this.statPerdu.text = "Masques tirés : " + PlayerPrefs.GetInt("Masques tirés", 0) + System.Environment.NewLine +
                 "Grenades lancées : " + PlayerPrefs.GetInt("Grenades lancées", 0) + System.Environment.NewLine +
                 "Tourelles déployées : " + PlayerPrefs.GetInt("Tourelles déployées", 0) + System.Environment.NewLine +
-                "Villes protégées : 0" + System.Environment.NewLine +
                 "Durée de la partie : " + s + System.Environment.NewLine +
                 "Fragments de virus récoltés : " + PlayerPrefs.GetInt("Fragments de virus récoltés", 0);
                 PlayerPrefs.SetInt("FragVirus", PlayerPrefs.GetInt("FragVirus", 0) + PlayerPrefs.GetInt("Fragments de virus récoltés", 0));

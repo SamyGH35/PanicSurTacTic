@@ -52435,8 +52435,7 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1.5
   m_Text: "Masque tir\xE9s : 98\nGrenades lanc\xE9es : 35\nTourelles d\xE9ploy\xE9es
-    : 3\nVilles prot\xE9g\xE9es : 0\nDur\xE9e de la partie : 6:41\nFragments de virus
-    r\xE9colt\xE9s : 12"
+    : 3\nDur\xE9e de la partie : 6:41\nFragments de virus r\xE9colt\xE9s : 12"
 --- !u!222 &1554806101
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -55545,8 +55544,7 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1.5
   m_Text: "Masque tir\xE9s : 98\nGrenades lanc\xE9es : 35\nTourelles d\xE9ploy\xE9es
-    : 3\nVilles prot\xE9g\xE9es : 0\nDur\xE9e de la partie : 6:41\nFragments de virus
-    r\xE9colt\xE9s : 12"
+    : 3\nDur\xE9e de la partie : 6:41\nFragments de virus r\xE9colt\xE9s : 12"
 --- !u!222 &1641416442
 CanvasRenderer:
   m_ObjectHideFlags: 0
