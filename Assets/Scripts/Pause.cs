@@ -35,9 +35,9 @@ public class Pause : MonoBehaviour
             {
                 source.volume = (float)PlayerPrefs.GetInt("VolumeSons") / 100;
                 source.PlayOneShot(backButtonSound);
+                Cursor.visible = false;
                 pause.SetActive(false);
                 Time.timeScale = 1;
-                Cursor.visible = false;
             }
         }
     }

@@ -5,7 +5,8 @@ using UnityEngine.AI;
 
 public class Walk : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public float marge = 2.5f;
+
     void Start()
     {
         Vector3 randomDirection = Random.insideUnitSphere * 250;
@@ -16,10 +17,9 @@ public class Walk : MonoBehaviour
         GetComponent<NavMeshAgent>().destination = finalPosition;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if(GetComponent<NavMeshAgent>().destination == transform.position)
+        if(Vector3.Distance(transform.position, GetComponent<NavMeshAgent>().destination) <= marge)
         {
             Vector3 randomDirection = Random.insideUnitSphere * 250;
             randomDirection += transform.position;

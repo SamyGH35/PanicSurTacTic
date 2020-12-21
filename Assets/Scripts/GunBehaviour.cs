@@ -28,7 +28,11 @@ public class GunBehaviour : MonoBehaviour
         return firing;
     }
 
-    // Update is called once per frame
+    public void unUse()
+    {
+        firing = false;
+    }
+
     void Update()
     {
         if (Input.GetMouseButtonDown(0) && Time.timeScale != 0 && PlayerPrefs.GetInt("MunGun", 0) > 0 && !firing)
@@ -58,13 +62,5 @@ public class GunBehaviour : MonoBehaviour
         Vector3 rotation = mask.transform.rotation.eulerAngles;
         mask.transform.rotation = Quaternion.Euler(rotation.x, transform.eulerAngles.y, rotation.z);
         mask.GetComponent<Rigidbody>().AddForce(maskSpawn.forward * maskSpeed, ForceMode.Impulse);
-
-        StartCoroutine(DestroyMaskAfterTime(mask, lifeTime));
-    }
-
-    private IEnumerator DestroyMaskAfterTime(GameObject mask, float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        Destroy(mask);
     }
 }

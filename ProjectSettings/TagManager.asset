@@ -7,6 +7,7 @@ TagManager:
   - noeud_routage
   - PNJ
   - Character
+  - SliderContamination
   layers:
   - Default
   - TransparentFX

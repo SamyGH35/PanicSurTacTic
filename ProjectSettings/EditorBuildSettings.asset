@@ -15,7 +15,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Fini/Tutoriel.unity
     guid: d2ca5555a28ed2f439f8ee8636276095
   - enabled: 1
-    path: Assets/Scenes/En cours/Solo.unity
+    path: Assets/Scenes/Fini/Solo.unity
     guid: 955fd3e958d54e6459e71a15e74eb937
   - enabled: 1
     path: Assets/Scenes/Fini/Options.unity

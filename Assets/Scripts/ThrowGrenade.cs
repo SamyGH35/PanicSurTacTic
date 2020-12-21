@@ -19,7 +19,6 @@ public class ThrowGrenade : MonoBehaviour
     private bool pressed = false;
     private int etape = 1;
 
-    // Update is called once per frame
     void Update()
     {
         if (PlayerPrefs.GetInt("MunGrenade", 0) > 0 && !throwing && Time.timeScale != 0)

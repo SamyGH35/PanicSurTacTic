@@ -27,7 +27,6 @@ public class TurretBehaviour : MonoBehaviour
     public AudioClip shotSound;
     public AudioSource source;
 
-    // Update is called once per frame
     void Update()
     {
         timePassed += Time.deltaTime;
@@ -49,7 +48,7 @@ public class TurretBehaviour : MonoBehaviour
 
         if (target!=null)
         {
-            Debug.Log(target.gameObject.name);
+            //Debug.Log(target.gameObject.name);
             // If the character has a mask or is too far, return
             Contagion script = target.transform.gameObject.GetComponent<Contagion>();
             if ((script && script.IsMasked()) || Vector3.Distance(target.transform.position, transform.position) > range)
@@ -60,12 +59,6 @@ public class TurretBehaviour : MonoBehaviour
             else
             {
                 // Rotation
-                /*
-                Vector3 targetDirection = target.transform.position - transform.position;
-                float singleStep = rotationSpeed * Time.deltaTime;
-                Vector3 newDirection = Vector3.RotateTowards(transform.forward, targetDirection, singleStep, 0.0f);
-                transform.rotation = Quaternion.LookRotation(new Vector3(transform.rotation.x, newDirection.y, transform.rotation.z));
-                */
                 Vector3 targetDirection = target.transform.position - transform.position;
                 targetDirection.y = 0;
                 Quaternion rotation = Quaternion.LookRotation(targetDirection);
@@ -81,7 +74,7 @@ public class TurretBehaviour : MonoBehaviour
         }
         if (shoot >= nbOfMaskToShoot)
         {
-            StartCoroutine(DestroyAfterTime(gameObject, 0.5f));
+            Destroy(gameObject);
         }
     }
 
@@ -94,19 +87,9 @@ public class TurretBehaviour : MonoBehaviour
 
         GameObject mask = Instantiate(maskPrefab);
 
-        //Physics.IgnoreCollision(mask.GetComponent<Collider>(), GetComponent<Collider>());
-
         mask.transform.position = maskSpawn.position;
         Vector3 rotation = mask.transform.rotation.eulerAngles;
         mask.transform.rotation = Quaternion.Euler(rotation.x, transform.eulerAngles.y, rotation.z);
         mask.GetComponent<Rigidbody>().AddForce(maskSpawn.forward * maskSpeed, ForceMode.Impulse);
-
-        StartCoroutine(DestroyAfterTime(mask, lifeTime));
-    }
-
-    private IEnumerator DestroyAfterTime(GameObject obj, float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        Destroy(obj);
     }
 }

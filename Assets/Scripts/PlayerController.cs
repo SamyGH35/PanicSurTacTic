@@ -35,12 +35,12 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        Time.timeScale = 0;
         sourceMusiques.volume = (float)PlayerPrefs.GetInt("VolumeMusiques") / 400;
         rb = GetComponent<Rigidbody>();
-        Time.timeScale = 0;
         PlayerPrefs.SetInt("MunGun", 100);
-        PlayerPrefs.SetInt("MunGrenade", 5);
-        PlayerPrefs.SetInt("MunTourelle", 3);
+        PlayerPrefs.SetInt("MunGrenade", 10);
+        PlayerPrefs.SetInt("MunTourelle", 5);
         plafond.SetActive(false);
     }
 
@@ -53,9 +53,12 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        Vector3 movement = new Vector3(movementX, 0.0f, movementY);
+        Vector3 movement = new Vector3(movementX, 0, movementY);
         movement = transform.TransformDirection(movement);
-        //rb.MovePosition(transform.position + movement * movementSpeed * Time.timeScale);
+        if (transform.position.y > 0.5f)
+        {
+            movement = new Vector3(movement.x, 0, movement.z);
+        }
         Vector3 targetPosition = transform.position + movement * movementSpeed * Time.timeScale;
         RaycastHit raycastHit;
         Physics.Raycast(transform.position, movement, out raycastHit, movementSpeed * Time.timeScale);
@@ -67,11 +70,6 @@ public class PlayerController : MonoBehaviour
         {
             rb.MovePosition(targetPosition);
         }
-        /*
-        Quaternion rotation = Quaternion.Euler(new Vector3(PlayerPrefs.GetInt("Inversion", -1) * Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0.0f) * PlayerPrefs.GetInt("Sensibilite", 10) * Time.timeScale);
-        rotation *= rb.rotation;
-        rb.MoveRotation(rotation);
-        */
         transform.Rotate(new Vector3(PlayerPrefs.GetInt("Inversion", -1) * Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0) * PlayerPrefs.GetInt("Sensibilite", 10) * Time.timeScale, Space.Self);
 
         if ((Input.GetKeyDown("right shift") || Input.GetKeyDown("left shift") || Input.GetKeyDown("space")) && transform.position.y < 0.25f)
@@ -110,23 +108,23 @@ public class PlayerController : MonoBehaviour
                 //Debug.Log(hit.collider.gameObject.name + " at " + hit.point);
                 if (hit.point.y < 0.5f && hit.point.x > -192 && hit.point.x < 187 && hit.point.z > -275 && hit.point.z < 257)
                 {
-                    if (hit.collider.gameObject.name.Length >= 4 && (hit.collider.gameObject.name.Substring(0, 4) == "Road" || hit.collider.gameObject.name.Substring(0, 4) == "Terr" || hit.collider.gameObject.name.Substring(0, 4) == "Gras"))
+                    if (hit.collider.gameObject.name.Length >= 4 && (hit.collider.gameObject.name.Substring(0, 4) == "Road" || hit.collider.gameObject.name.Substring(0, 4) == "Terr" || hit.collider.gameObject.name.Substring(0, 4) == "Park"))
                     {
-                        Instantiate(stock, new Vector3(hit.point.x, hit.point.y, hit.point.z), Quaternion.identity);
+                        Instantiate(stock, new Vector3(hit.point.x, hit.point.y, hit.point.z), Quaternion.Euler(0, 45 + 90 * ((int)Random.Range(0, 4)), 0));
                         Cursor.visible = false;
                         positionnement.SetActive(false);
                         plafond.SetActive(true);
+                        stockPositionnement = false;
                     }
                 }
             }
         }
-        if (Input.GetMouseButtonUp(0) && stockPositionnement)
+        if (Input.GetMouseButtonUp(0) && !stockPositionnement)
         {
-            stockPositionnement = false;
             Time.timeScale = 1;
         }
 
-            mapCamera.transform.position = new Vector3(transform.position.x, 10, transform.position.z);
+        mapCamera.transform.position = new Vector3(transform.position.x, 10, transform.position.z);
         minimapCamera.transform.position = new Vector3(transform.position.x, 10, transform.position.z);
         Quaternion rotation = Quaternion.identity;
         rotation.eulerAngles = new Vector3(90, transform.rotation.eulerAngles.y, 0);
@@ -164,10 +162,11 @@ public class PlayerController : MonoBehaviour
         if (other.name == "Stock(Clone)" && (Input.GetKeyDown("r") || Input.GetMouseButtonDown(1)))
         {
             PlayerPrefs.SetInt("MunGun", 100);
-            PlayerPrefs.SetInt("MunGrenade", 5);
-            PlayerPrefs.SetInt("MunTourelle", 3);
+            PlayerPrefs.SetInt("MunGrenade", 10);
+            PlayerPrefs.SetInt("MunTourelle", 5);
             sourceSons.volume = (float)PlayerPrefs.GetInt("VolumeSons") / 100;
             sourceSons.PlayOneShot(restock);
+            other.gameObject.GetComponent<ParticleSystem>().Play();
         }
     }
 }

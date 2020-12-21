@@ -587,7 +587,7 @@ MonoBehaviour:
   delay: 2.5
   explosionEffect: {fileID: 1000011128802252, guid: 96730f8640590934eacb6f860058e7f9,
     type: 3}
-  radius: 5
+  radius: 10
   force: 700
   shotSound: {fileID: 8300000, guid: edd0ac40a2534734199d4db5d4d60a6c, type: 3}
   source: {fileID: 7762000674785703581}

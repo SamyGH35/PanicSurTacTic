@@ -60,7 +60,6 @@ public class Skins : MonoBehaviour
     {
         sourceMusiques.volume = (float)PlayerPrefs.GetInt("VolumeMusiques") / 100;
         sourceSons.volume = (float)PlayerPrefs.GetInt("VolumeSons") / 100;
-        //PlayerPrefs.SetInt("FragVirus", 800);
         fragVirus.text = PlayerPrefs.GetInt("FragVirus", 0).ToString();
         skins = new GameObject[7];
         skins[0] = skin1;
@@ -86,17 +85,7 @@ public class Skins : MonoBehaviour
         materialsColor[4] = materialsColor5;
         materialsColor[5] = materialsColor6;
         materialsColor[6] = materialsColor7;
-        /*
-        PlayerPrefs.SetInt("SkinUsed", 1);
-        PlayerPrefs.SetInt("Skin", 1);
-        PlayerPrefs.SetInt("Skin1", 1);
-        PlayerPrefs.SetInt("Skin2", 0);
-        PlayerPrefs.SetInt("Skin3", 0);
-        PlayerPrefs.SetInt("Skin4", 0);
-        PlayerPrefs.SetInt("Skin5", 0);
-        PlayerPrefs.SetInt("Skin6", 0);
-        PlayerPrefs.SetInt("Skin7", 0);
-        */
+
         PlayerPrefs.SetInt("Skin", PlayerPrefs.GetInt("SkinUsed", 1));
         if (PlayerPrefs.GetInt("Skin1", 1) == 1)
         {
@@ -289,19 +278,6 @@ public class Skins : MonoBehaviour
                 skins[this.n - 1].transform.Find("Button").gameObject.SetActive(false);
                 button.transform.Find("Text").gameObject.GetComponent<Text>().text = "EQUIPER";
             }
-            /*
-            for (int i = 0; i < skins.Length; i++)
-            {
-                if (i == n - 1)
-                {
-                    skins[i].transform.Find("Border").gameObject.SetActive(true);
-                }
-                else
-                {
-                    skins[i].transform.Find("Border").gameObject.SetActive(false);
-                }
-            }
-            */
         }
         else
         {
@@ -368,7 +344,6 @@ public class Skins : MonoBehaviour
             {
                 if (epaule.transform.eulerAngles.z <= 149 && !salut)
                 {
-                    //epaule.transform.rotation = Quaternion.Euler(0, 0, 15 + Time.time * 100);
                     epaule.transform.rotation = Quaternion.Slerp(epaule.transform.rotation, Quaternion.Euler(0, 0, 150), Time.deltaTime * 7.5f);
                 }
                 else
@@ -383,7 +358,6 @@ public class Skins : MonoBehaviour
         {
             if (epaule.transform.eulerAngles.z >= 16)
             {
-                //epaule.transform.rotation = Quaternion.Euler(0, 0, 150 - Time.time * 100);
                 epaule.transform.rotation = Quaternion.Slerp(epaule.transform.rotation, Quaternion.Euler(0, 0, 15), Time.deltaTime * 7.5f);
             }
             else

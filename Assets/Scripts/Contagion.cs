@@ -5,9 +5,10 @@ using UnityEngine.UI;
 
 public class Contagion : MonoBehaviour
 {
-    private static int nbInstance = 0;
+    public static int nbInstance = 0;
     public static int contamination = 0;
-    public Slider sliderContamination;
+    private Slider sliderContamination;
+    public bool inTuto = false;
 
     // Stade de la maladie :
     //      0 -> non contaminé
@@ -18,12 +19,14 @@ public class Contagion : MonoBehaviour
     // Taille de la zone de contamination en sphere autour du tactic
     public float radiusArea = 5.0f;
 
-    // 1 chance sur 10
-    public int chanceToBeInfectedMasked = 10;
+    // 1 chance sur 4
+    public int chanceToBeInfectedMasked = 4;
     // 1 chance sur 2
     public int chanceToBeInfected = 2;
-    // 1 chance sur 3
-    public int chanceToInfect = 3;
+    // 1 chance sur 4
+    public int chanceToInfectMasked = 4;
+    // 1 chance sur 2
+    public int chanceToInfect = 2;
 
     // Temps entre 2 éternuements
     public int minTimeBetweenCough = 5;
@@ -68,11 +71,10 @@ public class Contagion : MonoBehaviour
         transform.Find("Capsule").transform.Find("Bras gauche").GetComponent<MeshRenderer>().material = blueColor;
         transform.Find("Capsule").transform.Find("Bras droit").GetComponent<MeshRenderer>().material = blueColor;
         hit = true;
-
-        while (stade > 0)
+        if (stade > 0)
         {
             MinusContamination();
-            stade--;
+            stade = 0;
         }
     }
 
@@ -81,7 +83,6 @@ public class Contagion : MonoBehaviour
         return hit;
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         nbInstance += 1;
@@ -93,13 +94,17 @@ public class Contagion : MonoBehaviour
         emission.enabled = true;
         emission.SetBurst(0, new ParticleSystem.Burst(0.0f, radiusArea * 10));
 
-        sliderContamination = GameObject.Find("/Canvas/Contamination/Slider").GetComponent<Slider>();
+        if (!inTuto)
+        {
+            sliderContamination = GameObject.Find("/Canvas/Contamination/Slider").GetComponent<Slider>();
+        }
 
-        for (int i = 0; i < stade; ++i)
+        if (stade > 0)
+        {
             PlusContamination();
+        }
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (stade > 1)
@@ -133,18 +138,34 @@ public class Contagion : MonoBehaviour
 
     void Cough()
     {
+        if (masked)
+        {
+            coughParticles.emission.SetBurst(0, new ParticleSystem.Burst(0.0f, radiusArea * 1));
+        }
+        else
+        {
+            coughParticles.emission.SetBurst(0, new ParticleSystem.Burst(0.0f, radiusArea * 10));
+        }
         coughParticles.Play();
 
         Collider[] insideColliders = Physics.OverlapSphere(transform.position, radiusArea);
         foreach (Collider col in insideColliders)
         {
-            //ajouter Random.Range() pour ne pas être contaminé forcement à chaque fois
             Contagion script = col.transform.gameObject.GetComponent<Contagion>();
             if (script && script != this)
             {
-                // On n'infecte que 1 fois sur 3 en moyenne
-                if (Random.Range(0, chanceToInfect) == 0)
-                    script.GetInfected();
+                if (masked)
+                {
+                    // Masqué, on n'infecte 1 fois sur 4 en moyenne
+                    if (Random.Range(0, chanceToInfectMasked) == 0)
+                        script.GetInfected();
+                }
+                else
+                {
+                    // Non-masqué, on n'infecte 1 fois sur 2 en moyenne
+                    if (Random.Range(0, chanceToInfect) == 0)
+                        script.GetInfected();
+                }
             }
         }
         cough = false;
@@ -154,7 +175,7 @@ public class Contagion : MonoBehaviour
     {
         int random = 0;
         if (masked)
-            random = Random.Range(0, chanceToBeInfectedMasked); // Si masqué, 1 chance sur 10 d'être infecté
+            random = Random.Range(0, chanceToBeInfectedMasked); // Si masqué, 1 chance sur 4 d'être infecté
         else
             random = Random.Range(0, chanceToBeInfected); // Sinon, 1 chance sur 2
 
@@ -163,7 +184,10 @@ public class Contagion : MonoBehaviour
             if (stade < 2)
             {
                 stade++;
-                PlusContamination();
+                if (stade < 2)
+                {
+                    PlusContamination();
+                }
             }
             if (stade > 0)
             {
@@ -183,21 +207,21 @@ public class Contagion : MonoBehaviour
 
     private void PlusContamination()
     {
-        contamination += 1;
+        contamination++;
 
         if (sliderContamination)
         {
-            sliderContamination.value = contamination * 100 / (nbInstance * 2);
+            sliderContamination.value = contamination * 100 / nbInstance;
         }
     }
 
     private void MinusContamination()
     {
-        contamination -= 1;
+        contamination--;
 
         if (sliderContamination)
         {
-            sliderContamination.value = contamination * 100 / (nbInstance * 2);
+            sliderContamination.value = contamination * 100 / nbInstance;
         }
     }
 

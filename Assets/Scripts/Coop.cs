@@ -6,7 +6,6 @@ public class Coop : MonoBehaviour
 {
     public AudioSource source;
 
-    //a enlever si on fait vraiment un coop
     public GameObject player;
     public GameObject blue;
     public GameObject green;
@@ -27,11 +26,10 @@ public class Coop : MonoBehaviour
     {
         source.volume = (float)PlayerPrefs.GetInt("VolumeMusiques") / 400;
 
-        player.transform.rotation = Quaternion.Slerp(player.transform.rotation, Quaternion.Euler(0, 180, 5 - Mathf.PingPong(Time.time * 10, 10)), Time.time * 10); //Quaternion.Euler(0, 180, Mathf.PingPong(Time.time * 10, 10) - 5);
+        player.transform.rotation = Quaternion.Slerp(player.transform.rotation, Quaternion.Euler(0, 180, 5 - Mathf.PingPong(Time.time * 10, 10)), Time.time * 10);
 
         if (jump)
         {
-            //player.transform.position = new Vector3(player.transform.position.x, -2.5f + Mathf.PingPong(Time.time * 2, 1), player.transform.position.z);
             player.transform.position = Vector3.Lerp(player.transform.position, new Vector3(5, -2.5f + Mathf.PingPong(Time.time * 2, 1), 0), Time.time * 2);
             if (!stop)
             {

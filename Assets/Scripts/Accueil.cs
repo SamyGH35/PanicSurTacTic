@@ -79,7 +79,6 @@ public class Accueil : MonoBehaviour
             {
                 if (epaule.transform.eulerAngles.z <= 149 && !salut)
                 {
-                    //epaule.transform.rotation = Quaternion.Euler(0, 0, 15 + Time.time * 100);
                     epaule.transform.rotation = Quaternion.Slerp(epaule.transform.rotation, Quaternion.Euler(0, 0, 150), Time.deltaTime * 7.5f);
                 }
                 else
@@ -94,7 +93,6 @@ public class Accueil : MonoBehaviour
         {
             if (epaule.transform.eulerAngles.z >= 16)
             {
-                //epaule.transform.rotation = Quaternion.Euler(0, 0, 150 - Time.time * 100);
                 epaule.transform.rotation = Quaternion.Slerp(epaule.transform.rotation, Quaternion.Euler(0, 0, 15), Time.deltaTime * 7.5f);
             }
             else

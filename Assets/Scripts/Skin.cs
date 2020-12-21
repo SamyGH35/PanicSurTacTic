@@ -28,7 +28,6 @@ public class Skin : MonoBehaviour
     private Material[] materials;
     private Material[] materialsColor;
 
-    // Start is called before the first frame update
     void Start()
     {
         materials = new Material[7];
@@ -72,11 +71,5 @@ public class Skin : MonoBehaviour
             }
             skin.transform.Find("Bras gauche").gameObject.GetComponent<MeshRenderer>().material = materialsColor[PlayerPrefs.GetInt("SkinUsed", 1) - 1];
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

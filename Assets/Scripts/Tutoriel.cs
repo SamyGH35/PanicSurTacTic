@@ -277,7 +277,7 @@ public class Tutoriel : MonoBehaviour
         else if (count == 18)
         {
             tutoText.text = "Votre but est de contenir l'épidémie !" + System.Environment.NewLine + System.Environment.NewLine +
-            "Pour visualiser la taux de contamination de la ville," + System.Environment.NewLine +
+            "Pour visualiser le taux de contamination de la ville," + System.Environment.NewLine +
             "vous avez accès à une barre de contamination qui vous indique le pourcentage de la population qui est infectée." + System.Environment.NewLine +
             "Essayez de rester sous le seuil critique le plus longtemps possible pour permettre aux scientifiques de trouver le vaccin !";
         }
@@ -344,9 +344,10 @@ public class Tutoriel : MonoBehaviour
         {
             Vector3 movement = new Vector3(movementX, 0.0f, movementY);
             movement = transform.TransformDirection(movement);
-            //transform.position += movement * movementSpeed * Time.timeScale;
-            //rb.MovePosition(transform.position + movement * movementSpeed * Time.timeScale);
-            //rb.position += movement * movementSpeed * Time.timeScale;
+            if (transform.position.y > 0.5f)
+            {
+                movement = new Vector3(movement.x, 0, movement.z);
+            }
             Vector3 targetPosition = transform.position + movement * movementSpeed * Time.timeScale;
             RaycastHit raycastHit;
             Physics.Raycast(transform.position, movement, out raycastHit, movementSpeed * Time.timeScale);
@@ -358,11 +359,6 @@ public class Tutoriel : MonoBehaviour
             {
                 rb.MovePosition(targetPosition);
             }
-            /*
-            Quaternion rotation = Quaternion.Euler(new Vector3(PlayerPrefs.GetInt("Inversion", -1) * Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0.0f) * rotationSpeed * Time.timeScale);
-            rotation *= rb.rotation;
-            rb.MoveRotation(rotation);
-            */
             transform.Rotate(new Vector3(PlayerPrefs.GetInt("Inversion", -1) * Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0) * PlayerPrefs.GetInt("Sensibilite", 10) * Time.timeScale, Space.Self);
         }
         if (jump)
@@ -579,6 +575,9 @@ public class Tutoriel : MonoBehaviour
                 sourceSons.PlayOneShot(changeWeapon);
                 changes = false;
             }
+            munGun.text = PlayerPrefs.GetInt("MunGun", 0).ToString();
+            munGrenade.text = PlayerPrefs.GetInt("MunGrenade", 0).ToString();
+            munTourelle.text = PlayerPrefs.GetInt("MunTourelle", 0).ToString();
         }
         if (map)
         {
@@ -594,9 +593,6 @@ public class Tutoriel : MonoBehaviour
                 Map.SetActive(false);
                 Minimap.SetActive(true);
             }
-            munGun.text = PlayerPrefs.GetInt("MunGun", 0).ToString();
-            munGrenade.text = PlayerPrefs.GetInt("MunGrenade", 0).ToString();
-            munTourelle.text = PlayerPrefs.GetInt("MunTourelle", 0).ToString();
         }
         if (pause)
         {
@@ -659,10 +655,11 @@ public class Tutoriel : MonoBehaviour
         if (other.name == "Stock(Clone)" && (Input.GetKeyDown("r") || Input.GetMouseButtonDown(1)))
         {
             PlayerPrefs.SetInt("MunGun", 100);
-            PlayerPrefs.SetInt("MunGrenade", 5);
-            PlayerPrefs.SetInt("MunTourelle", 3);
+            PlayerPrefs.SetInt("MunGrenade", 10);
+            PlayerPrefs.SetInt("MunTourelle", 5);
             sourceSons.volume = (float)PlayerPrefs.GetInt("VolumeSons") / 100;
             sourceSons.PlayOneShot(restock);
+            other.gameObject.GetComponent<ParticleSystem>().Play();
         }
     }
 }

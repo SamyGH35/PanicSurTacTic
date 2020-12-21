@@ -12,7 +12,6 @@ public class Grenade : MonoBehaviour
     public AudioClip shotSound;
     public AudioSource source;
 
-    // Start is called before the first frame update
     void Start()
     {
         StartCoroutine(ExplodeAfter(delay));
@@ -28,7 +27,7 @@ public class Grenade : MonoBehaviour
         Explode();
     }
 
-    void Explode() //changer num de contamination
+    void Explode()
     {
         source.volume = (float)PlayerPrefs.GetInt("VolumeSons") / 100;
         source.PlayOneShot(shotSound);

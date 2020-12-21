@@ -16,6 +16,11 @@ public class TurretSpawner : MonoBehaviour
     private bool throwing = false;
     private bool once = false;
 
+    public void unUse()
+    {
+        throwing = false;
+    }
+
     void Update()
     {
         if (PlayerPrefs.GetInt("MunTourelle", 0) > 0 && !throwing)
@@ -42,13 +47,13 @@ public class TurretSpawner : MonoBehaviour
     {
         RaycastHit hit;
         if (Physics.Raycast(spawner.position, Vector3.down, out hit) && hit.collider.gameObject.name.Length >= 7 &&
-            (hit.collider.gameObject.name.Substring(0, 4) == "Road" || hit.collider.gameObject.name.Substring(0, 5) == "Grass" || hit.collider.gameObject.name.Substring(0, 7) == "Terrain"))
+            (hit.collider.gameObject.name.Substring(0, 4) == "Road" || hit.collider.gameObject.name.Substring(0, 5) == "Grass" || hit.collider.gameObject.name.Substring(0, 7) == "Terrain" || hit.collider.gameObject.name.Substring(0, 7) == "Parking"))
         {
             source.volume = (float)PlayerPrefs.GetInt("VolumeSons") / 100;
             source.PlayOneShot(shotSound);
             PlayerPrefs.SetInt("MunTourelle", PlayerPrefs.GetInt("MunTourelle", 0) - 1);
             PlayerPrefs.SetInt("Tourelles déployées", PlayerPrefs.GetInt("Tourelles déployées", 0) + 1);
-            Instantiate(turret, new Vector3(hit.point.x, hit.point.y, hit.point.z), spawner.rotation);
+            Instantiate(turret, new Vector3(hit.point.x, hit.point.y, hit.point.z), Quaternion.Euler(new Vector3(0,transform.rotation.eulerAngles.y,0)));
             tourelleEnMain.SetActive(false);
             StartCoroutine(Stop());
         }
